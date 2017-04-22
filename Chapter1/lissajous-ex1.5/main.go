@@ -2,6 +2,7 @@
 // Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 
+// gopl.io Exercise 1.5
 // Modifications Copyright © 2017 Douglas Will
 // License: https://creativecommons.org/licenses/by-sa/4.0/
 
