@@ -36,7 +36,7 @@ import (
 var green = color.RGBA{0x00, 0xff, 0x00, 0xff}
 
 // DW - use the green color in the palette
-var palette = []color.Color{color.White, green}
+var palette = []color.Color{color.Black, green}
 
 //var palette = []color.Color{color.White, color.Black}
 
