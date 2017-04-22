@@ -1,5 +1,9 @@
+// Original work
 // Copyright © 2016 Alan A. A. Donovan & Brian W. Kernighan.
 // License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+// Modifications Copyright © 2017 Douglas Will
+// License: https://creativecommons.org/licenses/by-sa/4.0/
 
 // Run with "web" command-line argument for web server.
 // See page 13.
@@ -28,7 +32,13 @@ import (
 
 //!+main
 
-var palette = []color.Color{color.White, color.Black}
+// DW - create a green on black color Palette
+var green = color.RGBA{0x00, 0xff, 0x00, 0xff}
+
+// DW - use the green color in the palette
+var palette = []color.Color{color.White, green}
+
+//var palette = []color.Color{color.White, color.Black}
 
 const (
 	whiteIndex = 0 // first color in palette
