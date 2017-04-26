@@ -17,6 +17,8 @@ var cache = struct {
 
 func main() {
 
+	fmt.Printf("%v\n", cache)
+
 	// Since the 'Lock' method fo 'sync.Mutex' is available to 'cache'
 	// we can use it to lock and unlock the map.
 	cache.Lock()
