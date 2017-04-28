@@ -23,6 +23,14 @@ var tracks = []*Track{
 	{"Ready 2 Go", "Martin Solveig", "Smash", 2011, length("4m24s")},
 }
 
+var headings = []string{
+	"Title",
+	"Artist",
+	"Album",
+	"Year",
+	"Length",
+}
+
 func length(s string) time.Duration {
 	d, err := time.ParseDuration(s)
 	if err != nil {
@@ -33,19 +41,29 @@ func length(s string) time.Duration {
 
 func main() {
 
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Enter text: ")
-	text, _ := reader.ReadString('\n')
-	fmt.Println(text)
-
-	fmt.Println("Enter text: ")
-	text2 := ""
-	fmt.Scanln(&text2)
-	fmt.Println(text2)
-
-	fmt.Print("Enter text, again: ")
 	scanner := bufio.NewScanner(os.Stdin)
-	scanner.Scan()
-	fmt.Println(scanner.Text())
 
+	fmt.Printf("Table Headings\n")
+	for _, h := range headings {
+		fmt.Printf("     %v\n", h)
+	}
+	fmt.Println()
+
+	fmt.Print("Select a Heading:")
+	scanner.Scan()
+	fmt.Printf("You selected: %v\n", scanner.Text())
+
+	if contains(headings, scanner.Text) {
+		fmt.Printf("You mand a valid choice")
+	}
+
+}
+
+func contains(strSlice []string, search string) bool {
+	for _, value := range strSlice {
+		if value == search {
+			return true
+		}
+	}
+	return false
 }
