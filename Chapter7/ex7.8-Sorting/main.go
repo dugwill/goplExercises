@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -44,17 +45,27 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	fmt.Printf("Table Headings\n")
-	for _, h := range headings {
-		fmt.Printf("     %v\n", h)
-	}
+
+	list(headings)
+
 	fmt.Println()
 
 	fmt.Print("Select a Heading:")
 	scanner.Scan()
-	fmt.Printf("You selected: %v\n", scanner.Text())
 
-	if contains(headings, scanner.Text) {
-		fmt.Printf("You mand a valid choice")
+	if i, err := strconv.Atoi(scanner.Text()); err == nil {
+
+		i -= 1
+		if i < len(headings) {
+
+			fmt.Printf("You selected: %v\n", headings[i])
+
+			if contains(headings, headings[i]) {
+				fmt.Println("You made a valid choice.")
+				headings = sortHeadings(headings, headings[i])
+			}
+		}
+		fmt.Println("Invalid choice")
 	}
 
 }
@@ -66,4 +77,25 @@ func contains(strSlice []string, search string) bool {
 		}
 	}
 	return false
+}
+
+// sortHeading takes a slice of strings and one element from that slice
+// It re-orders the slice, placing the selection in the first position
+func sortHeadings(headings []string, selection string) []string {
+
+	fmt.Println("Selection:", selection)
+
+	if selection == headings[0] {
+		fmt.Println("Order is correct")
+		return headings
+	}
+	// Reorder slice
+
+	return headings
+}
+
+func list(headings []string) {
+	for index := 0; index < len(headings); index++ {
+		fmt.Printf("%d. %s\n", index+1, headings[index])
+	}
 }
