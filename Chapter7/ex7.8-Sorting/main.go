@@ -6,9 +6,6 @@
 // Modifications Copyright © 2017 Douglas Will
 // License: https://creativecommons.org/licenses/by-sa/4.0/
 
-// ***********  This Exersize is not finished   ********/
-// at this point,
-
 package main
 
 import (
