@@ -26,25 +26,27 @@ import (
 //!+template
 
 var tracklist = template.Must(template.New("tracklist").Parse(`
-<h1>{{.len(Tracks)}} Tracks</h1> 
-<table>
-<tr style='text-align: left'>
-  <th>Title</th>
-  <th>Artist</th>
-  <th>Album</th>
-  <th>Year</th>
-  <th>Lenght</th>
-</tr>
-{{range .Tracks}}
+
 <tr>
-  <td>{{.track.Title}}</td>
-  <td>{{.track.Artist}}</td>
-  <td>{{.track.Album}}</td>
-  <td>{{.track.Year}}</td>
-  <td>{{.track.Lenght}}</td>
+  <td>{{.Title}}</td>
+  <td>{{.Artist}}</td>
+  <td>{{.Album}}</td>
+  <td>{{.Year}}</td>
+  <td>{{.Lenght}}</td>
 </tr>
-{{end}}
-</table>
+
+`))
+
+var tracklist1 = template.Must(template.New("tracklist1").Parse(`
+
+<tr>
+  <td>{{.0.Title}}</td>
+  <td>{{.0.Artist}}</td>
+  <td>{{.0.Album}}</td>
+  <td>{{.0.Year}}</td>
+  <td>{{.0.Lenght}}</td>
+</tr>
+
 `))
 
 //!-template
@@ -219,9 +221,18 @@ func printTracks(tracks []*Track) {
 	tw.Flush() // calculate column widths and print table
 	fmt.Println()
 
-	if err := tracklist.Execute(os.Stdout, tracks); err != nil {
-		log.Fatal(err)
+	for _, t := range tracks {
+		if err := tracklist.Execute(os.Stdout, t); err != nil {
+			log.Fatal(err)
+		}
 	}
+
+	fmt.Printf("%v\n", tracks[0].Title)
+
+	//if err := tracklist1.Execute(os.Stdout, tracks); err != nil {
+	//	log.Fatal(err)
+	//}
+
 }
 
 //!-printTracks
