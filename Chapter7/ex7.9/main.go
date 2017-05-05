@@ -15,6 +15,7 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+	"net/http"
 	"os"
 	"sort"
 	"strconv"
@@ -27,25 +28,25 @@ import (
 
 var tracklist = template.Must(template.New("tracklist").Parse(`
 
+<h1>{{"Tracklist"}}</h1>
+<table>
+<tr style='text-align: left'>
+  <th><a href='{{.HTMLURL}}'>Title</a></th>
+  <th>Artist</th>
+  <th>Album</th>
+  <th>Year</th>
+  <th>Length</th> 
+</tr>
+
+{{range .}}
 <tr>
   <td>{{.Title}}</td>
   <td>{{.Artist}}</td>
   <td>{{.Album}}</td>
   <td>{{.Year}}</td>
-  <td>{{.Lenght}}</td>
+  <td>{{.Length}}</td>
 </tr>
-
-`))
-
-var tracklist1 = template.Must(template.New("tracklist1").Parse(`
-
-<tr>
-  <td>{{.0.Title}}</td>
-  <td>{{.0.Artist}}</td>
-  <td>{{.0.Album}}</td>
-  <td>{{.0.Year}}</td>
-  <td>{{.0.Lenght}}</td>
-</tr>
+{{end}}
 
 `))
 
@@ -89,6 +90,8 @@ func length(s string) time.Duration {
 func main() {
 
 	scanner := bufio.NewScanner(os.Stdin)
+
+	log.Fatal(http.ListenAndServe("localhost:8000", tracks))
 
 	// Enter input loop, q is the esc char
 	for scanner.Text() != "q" {
@@ -209,6 +212,10 @@ func list(headings []string) {
 
 //!- list
 
+func (tracks []*Track) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+
+}
+
 //!+printTracks
 func printTracks(tracks []*Track) {
 	const format = "%v\t%v\t%v\t%v\t%v\t\n"
@@ -221,13 +228,9 @@ func printTracks(tracks []*Track) {
 	tw.Flush() // calculate column widths and print table
 	fmt.Println()
 
-	for _, t := range tracks {
-		if err := tracklist.Execute(os.Stdout, t); err != nil {
-			log.Fatal(err)
-		}
+	if err := tracklist.Execute(os.Stdout, tracks); err != nil {
+		log.Fatal(err)
 	}
-
-	fmt.Printf("%v\n", tracks[0].Title)
 
 	//if err := tracklist1.Execute(os.Stdout, tracks); err != nil {
 	//	log.Fatal(err)
