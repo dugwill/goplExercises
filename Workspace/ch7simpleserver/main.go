@@ -83,109 +83,118 @@ func main() {
 
 }
 
+// ServeHTTP is an interface in the HTTP package
+// Here it is implemented by the trackptr tyep
 func (tracks trackptr) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
+	// Determine what was selection and sort the headings slice
+	switch req.URL.Path {
+	case "/sortByTitle":
+		headings = sortHeadings(headings, "Title")
+	case "/sortByArtist":
+		headings = sortHeadings(headings, "Artist")
+	case "/sortByAlbum":
+		headings = sortHeadings(headings, "Album")
+	case "/sortByYear":
+		headings = sortHeadings(headings, "Year")
+	case "/sortByLength":
+		headings = sortHeadings(headings, "Length")
+	}
+
+	// sort table based on headings order
+	// how to supply the sort order??
+	// Modified the customSort struct to include the sorted headings
+	// Modified the Anonymous Func in customSort to iterate through
+	// headings in their sort order
+	sort.Sort(customSort{tracks, headings, func(x, y *Track) bool {
+		// counter to iterate through the heading in sorted order
+		for i := 0; i < 5; i++ {
+
+			// for each sort layer, this Switch/Case selectis and
+			// returns the correct bool answer for the layer
+			switch headings[i] {
+			case "Title":
+				{
+					if x.Title != y.Title {
+						return x.Title < y.Title
+					}
+				}
+			case "Artist":
+				{
+					if x.Artist != y.Artist {
+						return x.Artist < y.Artist
+					}
+				}
+			case "Album":
+				{
+					if x.Album != y.Album {
+						return x.Album < y.Album
+					}
+				}
+			case "Year":
+				{
+					if x.Year != y.Year {
+						return x.Year < y.Year
+					}
+				}
+			case "Length":
+				{
+					if x.Length != y.Length {
+						return x.Length < y.Length
+					} //if --- I needed to add comments to track the closing brackets
+				} // case Length
+			} // switch
+		} // for
+		return false
+	}}) // anonymous func, customSort, sort
+
+	// Write the sorted list to the output stream using the template
 	if err := tracklist.Execute(w, tracks); err != nil {
 		log.Fatal(err)
 	}
-
-	for {
-		switch req.URL.Path {
-		case "/sortByTitle":
-			headings = sortHeadings(headings, 0)
-		case "/sortByArtist":
-			headings = sortHeadings(headings, 1)
-		case "/sortByAlbum":
-			headings = sortHeadings(headings, 2)
-		case "/sortByYear":
-			headings = sortHeadings(headings, 3)
-		case "/sortByLength":
-			headings = sortHeadings(headings, 4)
-
-		}
-		// sort table based on headings order
-		// how to suppy the sort order??
-		// Modified the customSort struct to include the sorted headings
-		// Modified the Anonymous Func in customSort to iterate through
-		// headings in their sort order
-		sort.Sort(customSort{tracks, headings, func(x, y *Track) bool {
-			// counter to iterate through the heading in sorted order
-			for i := 0; i < 5; i++ {
-
-				// for each sort layer, this Switch/Case selectis and
-				// returns the correct bool answer for the layer
-				switch headings[i] {
-				case "Title":
-					{
-						if x.Title != y.Title {
-							return x.Title < y.Title
-						}
-					}
-				case "Artist":
-					{
-						if x.Artist != y.Artist {
-							return x.Artist < y.Artist
-						}
-					}
-				case "Album":
-					{
-						if x.Album != y.Album {
-							return x.Album < y.Album
-						}
-					}
-				case "Year":
-					{
-						if x.Year != y.Year {
-							return x.Year < y.Year
-						}
-					}
-				case "Length":
-					{
-						if x.Length != y.Length {
-							return x.Length < y.Length
-						} //if --- I needed to add comments to track the closing brackets
-					} // case Length
-				} // switch
-			} // for
-			return false
-		}}) // anonymous func, customSort, sort
-	}
-
-	if err := tracklist.Execute(w, tracks); err != nil {
-		log.Fatal(err)
-	}
-
 }
 
 //!+sortHeading
 // sortHeading takes a slice of strings and one element from that slice
 // It re-orders the slice, placing the selection in the first position
-func sortHeadings(headings []string, i int) []string {
+
+func sortHeadings(headings []string, selection string) []string {
 
 	//fmt.Println("Selection:", headings[i])
 
 	// Check to see if the selection the first in the list
-	if headings[i] == headings[0] {
+	// If it is just return the headings
+	if selection == headings[0] {
 		fmt.Println("Order is correct")
 		return headings
 	}
 
-	// tmp holds the selection as the items are reordered
-	tmp := headings[i]
+	// Find index of the selection in the headings slice
+	var i int
+	for index, v := range headings {
+		if v == selection {
+			i = index
+		}
+	}
 
-	// Reorder slice. Iterate through the slic, moving items
+	// Reorder slice. Iterate through the slice, moving items
 	// before the selection to the right
 	for index := i; index > 0; index-- {
 		headings[index] = headings[index-1]
 	}
 
 	//Place the selection at the front of the slice
-	headings[0] = tmp
+	headings[0] = selection
 	// return the reordered slice
+	fmt.Printf("%v\n", headings)
 	return headings
 }
 
+//!-sortHeading
+
 //!+customcode
+// This custom code implements the necessary interfaces
+// of the Sort package to sort the tracks slice
 // Modified customSort struct to inlcude headings
 type customSort struct {
 	t        []*Track
