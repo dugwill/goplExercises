@@ -9,9 +9,21 @@ import (
 
 func main() {
 
+<<<<<<< HEAD
 	fmt.Println(isPalindrome([]byte("racecar")))                   //true
 	fmt.Println(isPalindrome([]byte("sore was I ere I saw eros"))) //true
 	fmt.Println(isPalindrome([]byte("This is not a Palindrome")))  //false
+=======
+	input := palitest{7, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1}
+
+	sort.Sort(input)
+	fmt.Println(input)
+
+	input = palitest{7, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1}
+
+	sort.Reverse(input)
+	fmt.Println(input)
+>>>>>>> a724179ef410b1a9a142c7c756559f3991151419
 
 }
 
@@ -30,6 +42,12 @@ func isPalindrome(s palitest) bool {
 
 type palitest []byte
 
+<<<<<<< HEAD
 func (x palitest) Len() int           { return len(x) }
 func (x palitest) Less(i, j int) bool { return (x[i] < x[j]) }
 func (x palitest) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
+=======
+func (x palitest) Len() int           { fmt.Println("Len"); return len(x) }
+func (x palitest) Less(i, j int) bool { fmt.Println("Less"); return x[i] < x[j] } //This tests if i<j and returns t/f
+func (x palitest) Swap(i, j int)      { fmt.Println("Swap"); x[i], x[j] = x[j], x[i] }
+>>>>>>> a724179ef410b1a9a142c7c756559f3991151419
