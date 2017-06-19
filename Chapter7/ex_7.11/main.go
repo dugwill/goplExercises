@@ -12,8 +12,8 @@
 
 // ***********  This Exersize is finished   ********/
 // Added handlers for Create, update, and delete.
-// I wasn't sure what was meant by read since the handler
-// price already read the DB for the price of a particular item
+// I wasn't sure what was meant by 'read' since the handlers
+// price and list already read the DB
 
 package main
 
@@ -30,26 +30,30 @@ func main() {
 	db := database{"shoes": 50, "socks": 5}
 	http.HandleFunc("/list", db.list)
 	http.HandleFunc("/price", db.price)
-	http.HandleFunc("/create", db.create) // New Handler for crating an new item
-	http.HandleFunc("/update", db.update)
-	http.HandleFunc("/delete", db.delete)
+	http.HandleFunc("/create", db.create) // New Handler for creating an new item in the DB
+	http.HandleFunc("/update", db.update) // New Handler for changing an item price
+	http.HandleFunc("/delete", db.delete) // New Handler for deleting an item
 	log.Fatal(http.ListenAndServe("localhost:8000", nil))
 }
 
 //!-main
 
+//Create a type to hold the price
 type dollars float32
 
 func (d dollars) String() string { return fmt.Sprintf("$%.2f", d) }
 
+// Create the database to hold the items
 type database map[string]dollars
 
+// list read sthe db and prints the items to the writer
 func (db database) list(w http.ResponseWriter, req *http.Request) {
 	for item, price := range db {
 		fmt.Fprintf(w, "%s: %s\n", item, price)
 	}
 }
 
+// 
 func (db database) price(w http.ResponseWriter, req *http.Request) {
 	item := req.URL.Query().Get("item")
 	if price, ok := db[item]; ok {
