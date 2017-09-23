@@ -13,7 +13,7 @@
 // ***********  This Exersize is finished   ********/
 // Change the list function to print output as HTML Table
 // Added a html template, itemList
-// Modified list function to write the item list using template
+// Modified list function to write the item list using template j
 
 package main
 
