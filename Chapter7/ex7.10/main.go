@@ -42,12 +42,9 @@ func isPalindrome(s palitest) bool {
 
 type palitest []byte
 
-<<<<<<< HEAD
 func (x palitest) Len() int           { return len(x) }
 func (x palitest) Less(i, j int) bool { return (x[i] < x[j]) }
 func (x palitest) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
-=======
 func (x palitest) Len() int           { fmt.Println("Len"); return len(x) }
 func (x palitest) Less(i, j int) bool { fmt.Println("Less"); return x[i] < x[j] } //This tests if i<j and returns t/f
 func (x palitest) Swap(i, j int)      { fmt.Println("Swap"); x[i], x[j] = x[j], x[i] }
->>>>>>> a724179ef410b1a9a142c7c756559f3991151419
